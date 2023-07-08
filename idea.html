@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Techify</title>
+    
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <!-- aos css -->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+        <!-- custom stylesheet -->
+        <link rel="stylesheet" href="/styles.css">
+    
+        <!-- Font awesome -->
+        <script src="https://kit.fontawesome.com/9b54928ef1.js" crossorigin="anonymous"></script>
+        <!-- Bootstrap scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg selectDisable">
+        <a class="navbar-brand" href="index.html">
+            TECHIFY
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-4" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-4" href="/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-4" href="/resources">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-4 active" href="/ideas">Ideas</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   
+        <section id="ideas-section">
+            <div class="container">
+                <% if(error && error.length > 0) { %>
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h5><%= error %></h5>
+                    </div>
+                <% } %>
+                <% if(success && success.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <h5><%= success %></h5>
+                    </div>
+                <% } %>
+            </div>
+           <div class="idea-parent-container">
+            <div class="auth-container">
+                <ul class="auth-list">
+        <h1>IDEAS</h1>
+        <% if(!currentUser) { %>
+            
+            <li class="nav-item ml-auto" id="auth-out">
+                <a href="/login" class="nav-link"><button class="btn btn-lg btn-dark idea-submit-btn">Login/Submit</button></a>
+            </li>
+           
+            <% } else { %>
+                
+                <li class="nav-item ml-auto" id="auth-in" style="display: flex;flex-direction: column;">
+                    <a href="#" class="nav-link disable" ><button class="btn btn-lg badge badge-pill badge-dark" style="display: flex;justify-content:space-between;align-items: center;"><img src="<%= currentUser.image %>" class="image-fluid rounded-circle user-img"><%= currentUser.name %><i class="fas fa-angle-down"></i> </button></a>
+                </li>
+            </ul>
+            <ul class="auth-list">
+                <li class="nav-item" id="auth-out">
+                    <a href="/ideas/new" class="nav-link"><button class="btn btn-lg btn-dark idea-submit-btn">Submit</button></a>
+                </li>
+                <li class="nav-item ml-auto" id="auth-out">
+                    <a href="/logout" class="nav-link"><button class="btn btn-lg btn-dark idea-submit-btn">Logout</button></a>
+                </li>
+            </ul>
+        
+            <% } %>
+        </div>
+        <div class="show" style="display: flex;flex-direction:column;justify-content: center;align-items: center;">
+  
+            <% ideas.forEach(function(idea){ %>
+             
+             
+                <%var tags = idea.tech.split(",") %>
+                <div class="card mt-4 mb-4 ml-4 mr-4" id="idea-card" style="text-align:left;">
+                    <div class="card-container" style="display: flex;">
+                        <div class="card-body" style="display: flex;">
+                            <span class="badge badge-pill badge-secondary p-2" style="display: flex;flex-direction: column;justify-content: space-between;"><i class="fas fa-angle-double-up"></i> <p><%= idea.likes.length %></p><i class="fas fa-angle-double-down"></i></span>
+                        </div>
+                        
+                        <div class="card-body">
+                        <p class="card-text"><%= idea.author.name %>, <%= idea.createdAt.toDateString() %></p>
+                        <h4 class="card-title"><%= idea.title %></h4>
+                        <p class="card-text"><%= idea.body.substring(0,200) %> ...</p>
+                        <p class="card-text">
+                            <% tags.forEach(function(tag){ %>
+                            <span class="badge badge-pill badge-primary"><%= tag %></span>
+                            <% }) %>
+                        </p>
+                        <a href="/ideas/<%= idea._id %>" ><i class="far fa-comment-dots" style="font-size:1.2rem;">&nbsp;See More</i> </a>
+    
+                        </div>
+                    </div>
+                    
+                </div>
+            <% }) %> 
+        </div>
+        </div>
+    
+    
+    
+    </section>
+<%- include("partials/footer") %>
+</body>
+</html>
